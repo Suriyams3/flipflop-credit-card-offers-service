@@ -1,0 +1,26 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: flipflop-credit-card-offers-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/flipflop_offers_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: ${MYSQL_DB_PASSWORD} # Put your actual MySQL root password here
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  # Append this to your existing application.yml
+  resilience4j:
+    ratelimiter:
+      instances:
+        offersRateLimiter:
+          limitForPeriod: 5           # Maximum number of allowed requests
+          limitRefreshPeriod: 10s     # Window time frame
+          timeoutDuration: 0s         # Reject additional traffic immediately
